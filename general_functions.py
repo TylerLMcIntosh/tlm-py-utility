@@ -1,16 +1,44 @@
-import os
+
+
 from pathlib import Path
 from typing import Union, List
 
 def dir_ensure(paths: Union[str, List[str]]) -> List[Path]:
     """
-    Ensure that one or more directories exist. Create them if they do not.
+    Ensure that one or more directories exist, creating them if necessary.
 
     Parameters:
-    - paths: A single path or a list of paths (str or Path)
+    ----------
+    paths : str or list of str or Path
+        A single directory path or a list of directory paths to check and create if missing.
 
     Returns:
-    - List of Path objects that were checked/created.
+    -------
+    List[Path]
+        A list of Path objects corresponding to the input paths.
+
+    Raises:
+    ------
+    TypeError
+        If the input is not a string, Path, or list/tuple of those types.
+
+    Side Effects:
+    -------------
+    - Creates directories on the file system if they do not exist.
+    - Prints messages to stdout indicating status for each path.
+
+    Examples:
+    --------
+    >>> dir_ensure("output")
+    [PosixPath('/absolute/path/to/output')]
+
+    >>> dir_ensure(["data", "results"])
+    [PosixPath('/abs/path/data'), PosixPath('/abs/path/results')]
+
+    Requires:
+    from pathlib import Path
+    from typing import Union, List
+
     """
     if isinstance(paths, (str, Path)):
         paths = [paths]
@@ -30,6 +58,4 @@ def dir_ensure(paths: Union[str, List[str]]) -> List[Path]:
             created_paths.append(path)
         except Exception as e:
             print(f"⚠️ Failed to create directory: {path} — {e}")
-
     return created_paths
-
